@@ -1,65 +1,231 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* BASE */
 body {
     font-family: Arial, sans-serif;
-    margin: 20px;
-    background-color: #f4f4f4;
-    color: #333;
+    background: #f1e4db;
+    color: #2b2b28;
 }
 
-h1 {
-    color: #333;
+/* =========================
+   LOGIN
+========================= */
+
+body.login-body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #27403d, #4a4a48);
 }
 
-form {
-    background-color: white;
-    padding: 20px;
-    border-radius: 5px;
-    max-width: 500px;
-    margin: 0 auto;
-}
-
-label {
-    display: block;
-    margin-top: 10px;
-}
-
-input {
+.login-container {
     width: 100%;
-    padding: 8px;
-    margin-top: 5px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    max-width: 420px;
 }
 
+.login-card {
+    background: #f1e4db;
+    padding: 32px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.login-header h1 {
+    color: #27403d;
+}
+
+.login-header p {
+    color: #4a4a48;
+    font-size: 0.9rem;
+}
+
+/* =========================
+   FORMULARIOS
+========================= */
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.form-group input,
+textarea,
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #4a4a48;
+    border-radius: 6px;
+    background: #ffffff;
+}
+
+/* BOTONES */
 button {
-    background-color: #333;
-    color: white;
-    padding: 10px 15px;
+    background: #27403d;
+    color: #fff;
     border: none;
-    border-radius: 4px;
+    padding: 10px 16px;
+    border-radius: 6px;
     cursor: pointer;
-    margin-top: 10px;
+    transition: 0.2s;
 }
 
 button:hover {
-    background-color: #555;
+    background: #d88f2e;
+    color: #2b2b28;
 }
+
+/* BOTÓN LOGIN */
+.btn-login {
+    width: 100%;
+    margin-top: 10px;
+}
+
+/* ERROR */
+.error-message {
+    color: red;
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* =========================
+   LAYOUT GENERAL
+========================= */
+
+.page-body {
+    background: #f1e4db;
+}
+
+/* HEADER */
+.topbar {
+    background: #27403d;
+    color: white;
+    padding: 15px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* MENÚ */
+.menu {
+    display: flex;
+    gap: 10px;
+    padding: 10px 20px;
+    background: #4a4a48;
+}
+
+.menu a {
+    color: #f1e4db;
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: #2b2b28;
+}
+
+.menu a:hover {
+    background: #d88f2e;
+    color: #2b2b28;
+}
+
+/* CONTENIDO */
+.card {
+    margin: 20px;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* =========================
+   TABLAS
+========================= */
 
 table {
     width: 100%;
     border-collapse: collapse;
-    margin: 20px 0;
+    margin-top: 15px;
 }
 
-table, th, td {
-    border: 1px solid #ddd;
+thead {
+    background: #27403d;
+    color: white;
 }
 
 th, td {
-    padding: 12px;
-    text-align: left;
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
 }
 
-th {
-    background-color: #333;
+tbody tr:nth-child(even) {
+    background: #f1e4db;
+}
+
+/* =========================
+   BUSCADOR
+========================= */
+
+.search-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.search-container input {
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #4a4a48;
+}
+
+/* =========================
+   INDEX
+========================= */
+
+.index-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.index-card {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.index-menu {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.index-menu a {
+    text-decoration: none;
+    background: #27403d;
     color: white;
+    padding: 10px;
+    border-radius: 6px;
+}
+
+.index-menu a:hover {
+    background: #d88f2e;
+    color: #2b2b28;
 }

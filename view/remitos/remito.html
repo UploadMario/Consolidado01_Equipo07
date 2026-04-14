@@ -3,48 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Remitos</title>
-    <link rel="stylesheet" href="../css/styles.css">
+    <title>Remitos</title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
-<body>
+<body class="page-body">
+<header class="topbar">
     <h1>Gestión de Remitos</h1>
+    <button type="button" onclick="logout()">Cerrar sesión</button>
+</header>
 
-    <!-- Formulario para crear un nuevo remito -->
-    <div class="form-container">
-        <h2>Crear Remito</h2>
-        <form id="form-remito">
-            <label for="despacho_destino">Despacho de Destino:</label>
-            <input type="text" id="despacho_destino" required>
+<nav class="menu">
+    <a href="/inicio">Inicio</a>
+    <a href="/documentos">Registrar documento</a>
+    <a href="/documentos/lista">Lista de documentos</a>
+    <a id="btn-usuarios" href="/usuarios" style="display:none;">Usuarios</a>
+</nav>
 
-            <label for="descripcion">Descripción:</label>
-            <textarea id="descripcion" required></textarea>
+<main class="card">
+<h2>Crear Remito</h2>
 
-            <label for="documentos">Documentos (IDs separados por coma):</label>
-            <input type="text" id="documentos" placeholder="Ej: 1, 2, 3" required>
-
-            <button type="submit">Crear Remito</button>
-        </form>
+<form id="form-remito">
+    <div class="form-group">
+        <label for="numero_remito">Número de remito</label>
+        <input type="text" id="numero_remito" required>
     </div>
 
-    <!-- Lista de remitos -->
-    <div class="list-container">
-        <h2>Lista de Remitos</h2>
-        <table id="tabla-remitos">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Despacho de Destino</th>
-                    <th>Descripción</th>
-                    <th>Cantidad de Documentos</th>
-                    <th>Fecha de Emisión</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
+    <div class="form-group">
+        <label for="destino_remito">Destino</label>
+        <input type="text" id="destino_remito" required>
     </div>
 
-    <script src="../js/app.js"></script>
+    <div class="form-group">
+        <label for="observaciones_remito">Observaciones</label>
+        <textarea id="observaciones_remito"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="documentos">Documentos (IDs separados por coma)</label>
+        <input type="text" id="documentos" placeholder="1,2,3">
+    </div>
+
+    <button type="submit">Crear Remito</button>
+</form>
+
+<hr>
+
+<h2>Lista de Remitos</h2>
+<table id="tabla-remitos">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Número</th>
+            <th>Destino</th>
+            <th>Fecha</th>
+            <th>Estado</th>
+            <th>Cantidad</th>
+            <th>Observaciones</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+</main>
+
+<script src="/js/app.js"></script>
 </body>
 </html>

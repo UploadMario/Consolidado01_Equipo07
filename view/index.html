@@ -2,27 +2,28 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Menú Principal</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Principal</title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
-<body>
+<body class="page-body">
+<header class="topbar">
+    <h1>Sistema de Gestión de Documentos</h1>
+    <button type="button" onclick="logout()">Cerrar sesión</button>
+</header>
 
-<h1>Sistema de Documentos</h1>
+<main class="card">
+    <h2>Bienvenido</h2>
+    <p id="texto-bienvenida">Cargando usuario...</p>
 
-<nav>
-    <ul>
-        <li><a href="auth/login.html">Login</a></li>
-        <li><a href="documentos/lista.html">Lista de Documentos</a></li>
-        <li><a href="documentos/documento.html">Registrar Documento</a></li>
-        <li><a href="remitos/remito.html">Remitos</a></li>
-        <li><a href="usuarios/usuario.html">Gestión de Usuarios</a></li>
-    </ul>
-</nav>
+    <nav class="menu">
+        <a href="/documentos">Registrar documento</a>
+        <a href="/documentos/lista">Lista de documentos</a>
+        <a href="/remitos">Remitos</a>
+        <a id="btn-usuarios" href="/usuarios" style="display:none;">Usuarios</a>
+    </nav>
+</main>
 
-<!-- opcional: redirección -->
-<script>
-    window.location.href = "auth/login.html";
-</script>
-
+<script src="/js/app.js"></script>
 </body>
 </html>
