@@ -6,7 +6,6 @@ const documentoRoutes = require("./routes/documentoRoutes");
 const remitoRoutes = require("./routes/remitoRoutes");
 const usuarioRoutes = require("./routes/usuarioRoutes");
 
-
 const app = express();
 const port = 3000;
 
@@ -19,14 +18,23 @@ app.use(session({
     saveUninitialized: true,
 }));
 
-// Rutas
+// Middleware para verificar autenticación
+const requireAuth = (req, res, next) => {
+    if (req.session.usuario) {
+        return next();
+    } else {
+        return res.redirect("/login");
+    }
+};
+
+// Rutas de la API
 app.use("/api/auth", authRoutes);
 app.use("/api/documentos", documentoRoutes);
 app.use("/api/remitos", remitoRoutes);
 app.use("/api/usuarios", usuarioRoutes);
 
 // Rutas para servir archivos HTML
-app.get("/", (req, res) => {
+app.get("/", requireAuth, (req, res) => {
     res.sendFile(path.join(__dirname, "views", "index.html"));
 });
 
@@ -38,16 +46,21 @@ app.get("/registro", (req, res) => {
     res.sendFile(path.join(__dirname, "views", "auth", "registro.html"));
 });
 
-app.get("/documentos", (req, res) => {
+app.get("/documentos", requireAuth, (req, res) => {
     res.sendFile(path.join(__dirname, "views", "documentos", "documento.html"));
 });
 
-app.get("/remitos", (req, res) => {
+app.get("/remitos", requireAuth, (req, res) => {
     res.sendFile(path.join(__dirname, "views", "remitos", "remito.html"));
 });
 
-app.get("/usuarios", (req, res) => {
-    res.sendFile(path.join(__dirname, "views", "usuarios", "usuario.html"));
+app.get("/usuarios", requireAuth, (req, res) => {
+    // Solo accesible para administradores
+    if (req.session.usuario && req.session.usuario.rol === "Administrador") {
+        res.sendFile(path.join(__dirname, "views", "usuarios", "usuario.html"));
+    } else {
+        res.status(403).send("Acceso denegado");
+    }
 });
 
 // Iniciar el servidor
