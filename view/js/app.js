@@ -1,8 +1,267 @@
 const API_BASE = "http://localhost:3000/api";
 
+<<<<<<< HEAD
 async function fetchJSON(url, options = {}) {
     const response = await fetch(url, {
         credentials: "same-origin",
+=======
+        const correo = document.getElementById("correo").value;
+        const contrasena = document.getElementById("contrasena").value;
+
+        fetch("http://localhost:3000/api/auth/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include", // 👈 IMPORTANTE PARA SESSION
+            body: JSON.stringify({ correo, contrasena }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(data.error);
+            } else {
+                alert("Login exitoso");
+
+                // guardar usuario
+                localStorage.setItem("usuario", JSON.stringify(data.usuario));
+
+                // redirigir a documento
+                window.location.href = "../documentos/documento.html";
+            }
+        })
+        .catch(error => console.error("Error:", error));
+    });
+}
+
+// =======================
+// DOCUMENTOS (REGISTRAR) ✅ CORREGIDO
+// =======================
+if (document.getElementById("form-documento")) {
+    document.getElementById("form-documento").addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        const codigo = document.getElementById("codigo").value;
+        const tipo = document.getElementById("tipo").value;
+        const fecha_recepcion = document.getElementById("fecha_recepcion").value;
+        const remitente = document.getElementById("remitente").value;
+        const destino = document.getElementById("destino").value;
+
+        fetch("http://localhost:3000/api/documentos", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include", // 🔥 IMPORTANTE
+            body: JSON.stringify({
+                tipo_documento: tipo,
+                fecha_recepcion,
+                remitente,
+                despacho_destino: destino
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
+
+            alert("Documento registrado con éxito");
+            document.getElementById("form-documento").reset();
+        })
+        .catch(error => console.error("Error:", error));
+    });
+}
+
+// =======================
+// AÑADIR A REMITO
+// =======================
+if (document.getElementById("btn-agregar-remito")) {
+    document.getElementById("btn-agregar-remito").addEventListener("click", function() {
+
+        const tipo_documento = document.getElementById("tipo_documento").value;
+        const fecha_recepcion = document.getElementById("fecha_recepcion").value;
+        const remitente = document.getElementById("remitente").value;
+        const despacho_destino = document.getElementById("despacho_destino").value;
+
+        if (!tipo_documento || !fecha_recepcion || !remitente || !despacho_destino) {
+            alert("Completa todos los campos antes de añadir al remito");
+            return;
+        }
+
+        alert(`Documento añadido al remito para ${despacho_destino}`);
+    });
+}
+
+// =======================
+// LISTA DE DOCUMENTOS
+// =======================
+if (document.getElementById("tabla-documentos")) {
+    cargarDocumentos();
+
+    document.getElementById("buscar-documento").addEventListener("input", function() {
+        const id = this.value;
+        if (id) {
+            buscarDocumentoPorId(id);
+        } else {
+            cargarDocumentos();
+        }
+    });
+
+    document.getElementById("filtrar-despacho").addEventListener("input", function() {
+        const despacho = this.value;
+        if (despacho) {
+            filtrarDocumentosPorDespacho(despacho);
+        } else {
+            cargarDocumentos();
+        }
+    });
+}
+
+function cargarDocumentos() {
+    fetch("http://localhost:3000/api/documentos")
+        .then(response => response.json())
+        .then(data => {
+            const tabla = document.getElementById("tabla-documentos").getElementsByTagName("tbody")[0];
+            tabla.innerHTML = "";
+
+            data.forEach(documento => {
+                const fila = tabla.insertRow();
+
+                fila.insertCell(0).textContent = documento.id_documento;
+                fila.insertCell(1).textContent = documento.codigo;
+                fila.insertCell(2).textContent = documento.tipo;
+                fila.insertCell(3).textContent = new Date(documento.fecha_recepcion).toLocaleString();
+                fila.insertCell(4).textContent = documento.remitente;
+                fila.insertCell(5).textContent = documento.destino;
+            });
+        })
+        .catch(error => console.error("Error:", error));
+}
+
+function filtrarDocumentosPorDespacho(despacho) {
+    fetch(`http://localhost:3000/api/documentos/despacho/${despacho}`)
+        .then(response => response.json())
+        .then(data => {
+            const tabla = document.getElementById("tabla-documentos").getElementsByTagName("tbody")[0];
+            tabla.innerHTML = "";
+
+            data.forEach(documento => {
+                const fila = tabla.insertRow();
+
+                fila.insertCell(0).textContent = documento.id_documento;
+                fila.insertCell(1).textContent = documento.codigo;
+                fila.insertCell(2).textContent = documento.tipo;
+                fila.insertCell(3).textContent = new Date(documento.fecha_recepcion).toLocaleString();
+                fila.insertCell(4).textContent = documento.remitente;
+                fila.insertCell(5).textContent = documento.destino;
+            });
+        })
+        .catch(error => console.error("Error:", error));
+}
+
+function filtrarDocumentosPorDespacho(despacho) {
+    fetch(`http://localhost:3000/api/documentos/despacho/${despacho}`)
+        .then(response => response.json())
+        .then(data => {
+            const tabla = document.getElementById("tabla-documentos").getElementsByTagName("tbody")[0];
+            tabla.innerHTML = "";
+
+            data.forEach(documento => {
+                const fila = tabla.insertRow();
+
+                fila.insertCell(0).textContent = documento.id;
+                fila.insertCell(1).textContent = documento.tipo_documento;
+                fila.insertCell(2).textContent = new Date(documento.fecha_recepcion).toLocaleString();
+                fila.insertCell(3).textContent = documento.remitente;
+                fila.insertCell(4).textContent = documento.despacho_destino;
+                fila.insertCell(5).textContent = documento.estado;
+            });
+        })
+        .catch(error => console.error("Error:", error));
+}
+
+// =======================
+// REMITOS (CREAR)
+// =======================
+if (document.getElementById("form-remito")) {
+    document.getElementById("form-remito").addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        const despacho_destino = document.getElementById("despacho_destino").value;
+        const descripcion = document.getElementById("descripcion").value;
+        const documentosIds = document.getElementById("documentos").value
+            .split(",")
+            .map(id => id.trim());
+
+        fetch("http://localhost:3000/api/remitos", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                cantidad_documentos: documentosIds.length,
+                descripcion,
+                fecha_emision: new Date().toISOString(),
+                despacho_destino,
+                documentos: documentosIds
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert("Remito creado con éxito");
+            document.getElementById("form-remito").reset();
+            cargarRemitos();
+        })
+        .catch(error => console.error("Error:", error));
+    });
+}
+
+// =======================
+// CARGAR REMITOS
+// =======================
+if (document.getElementById("tabla-remitos")) {
+    cargarRemitos();
+}
+
+function cargarRemitos() {
+    fetch("http://localhost:3000/api/remitos")
+        .then(response => response.json())
+        .then(data => {
+            const tabla = document.getElementById("tabla-remitos").getElementsByTagName("tbody")[0];
+            tabla.innerHTML = "";
+
+            data.forEach(remito => {
+                const fila = tabla.insertRow();
+
+                fila.insertCell(0).textContent = remito.id;
+                fila.insertCell(1).textContent = remito.despacho_destino;
+                fila.insertCell(2).textContent = remito.descripcion;
+                fila.insertCell(3).textContent = remito.cantidad_documentos;
+                fila.insertCell(4).textContent = new Date(remito.fecha_emision).toLocaleString();
+                fila.insertCell(5).textContent = remito.estado;
+
+                const celdaAcciones = fila.insertCell(6);
+
+                if (remito.estado === "Pendiente") {
+                    const botonEnviar = document.createElement("button");
+                    botonEnviar.textContent = "Enviar";
+                    botonEnviar.onclick = () => enviarRemito(remito.id);
+                    celdaAcciones.appendChild(botonEnviar);
+                }
+            });
+        })
+        .catch(error => console.error("Error:", error));
+}
+
+// =======================
+// ENVIAR REMITO
+// =======================
+function enviarRemito(remitoId) {
+    fetch(`http://localhost:3000/api/remitos/${remitoId}/enviar`, {
+        method: "PUT",
+>>>>>>> 1950aed26938d00186874f3b69d5fd8eda3f0c6e
         headers: {
             "Content-Type": "application/json",
             ...(options.headers || {}),
