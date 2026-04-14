@@ -2,10 +2,33 @@ const Documento = require("../models/Documento");
 
 exports.registrarDocumento = async (req, res) => {
     const { tipo_documento, fecha_recepcion, remitente, despacho_destino } = req.body;
+
     try {
-        const documentoId = await Documento.crear(tipo_documento, fecha_recepcion, remitente, despacho_destino);
-        res.status(201).json({ message: "Documento registrado con éxito", id: documentoId });
+        const usuario = req.session.usuario; // 👈 importante
+
+        if (!usuario) {
+            return res.status(401).json({ error: "No autorizado" });
+        }
+
+        const nuevoDocumento = {
+            codigo: "DOC-" + Date.now(), // 👈 generar código automático
+            tipo: tipo_documento,
+            fecha_recepcion,
+            remitente,
+            destino: despacho_destino,
+            observaciones: "", // opcional
+            id_usuario: usuario.id // 👈 clave
+        };
+
+        const result = await Documento.crear(nuevoDocumento);
+
+        res.status(201).json({
+            message: "Documento registrado con éxito",
+            id: result.insertId
+        });
+
     } catch (error) {
+        console.error("ERROR:", error);
         res.status(500).json({ error: "Error al registrar el documento" });
     }
 };

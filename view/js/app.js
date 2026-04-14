@@ -13,19 +13,20 @@ if (document.getElementById("form-login")) {
             headers: {
                 "Content-Type": "application/json",
             },
+            credentials: "include", // 👈 IMPORTANTE PARA SESSION
             body: JSON.stringify({ correo, contrasena }),
         })
         .then(response => response.json())
         .then(data => {
             if (data.error) {
-                document.getElementById("error-login").textContent = data.error;
+                alert(data.error);
             } else {
                 alert("Login exitoso");
 
-                // 🔐 GUARDAR USUARIO
+                // guardar usuario
                 localStorage.setItem("usuario", JSON.stringify(data.usuario));
 
-                // 🚀 IR A DOCUMENTO (pantalla principal)
+                // redirigir a documento
                 window.location.href = "../documentos/documento.html";
             }
         })
@@ -34,27 +35,38 @@ if (document.getElementById("form-login")) {
 }
 
 // =======================
-// DOCUMENTOS (REGISTRAR)
+// DOCUMENTOS (REGISTRAR) ✅ CORREGIDO
 // =======================
 if (document.getElementById("form-documento")) {
     document.getElementById("form-documento").addEventListener("submit", function(event) {
         event.preventDefault();
 
-        const tipo_documento = document.getElementById("tipo_documento").value;
+        const codigo = document.getElementById("codigo").value;
+        const tipo = document.getElementById("tipo").value;
         const fecha_recepcion = document.getElementById("fecha_recepcion").value;
         const remitente = document.getElementById("remitente").value;
-        const despacho_destino = document.getElementById("despacho_destino").value;
-        const estado = document.getElementById("estado").value;
+        const destino = document.getElementById("destino").value;
 
         fetch("http://localhost:3000/api/documentos", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ tipo_documento, fecha_recepcion, remitente, despacho_destino, estado }),
+            credentials: "include", // 🔥 IMPORTANTE
+            body: JSON.stringify({
+                tipo_documento: tipo,
+                fecha_recepcion,
+                remitente,
+                despacho_destino: destino
+            }),
         })
         .then(response => response.json())
         .then(data => {
+            if (data.error) {
+                alert(data.error);
+                return;
+            }
+
             alert("Documento registrado con éxito");
             document.getElementById("form-documento").reset();
         })
@@ -117,31 +129,34 @@ function cargarDocumentos() {
             data.forEach(documento => {
                 const fila = tabla.insertRow();
 
-                fila.insertCell(0).textContent = documento.id;
-                fila.insertCell(1).textContent = documento.tipo_documento;
-                fila.insertCell(2).textContent = new Date(documento.fecha_recepcion).toLocaleString();
-                fila.insertCell(3).textContent = documento.remitente;
-                fila.insertCell(4).textContent = documento.despacho_destino;
-                fila.insertCell(5).textContent = documento.estado;
+                fila.insertCell(0).textContent = documento.id_documento;
+                fila.insertCell(1).textContent = documento.codigo;
+                fila.insertCell(2).textContent = documento.tipo;
+                fila.insertCell(3).textContent = new Date(documento.fecha_recepcion).toLocaleString();
+                fila.insertCell(4).textContent = documento.remitente;
+                fila.insertCell(5).textContent = documento.destino;
             });
         })
         .catch(error => console.error("Error:", error));
 }
 
-function buscarDocumentoPorId(id) {
-    fetch(`http://localhost:3000/api/documentos/${id}`)
+function filtrarDocumentosPorDespacho(despacho) {
+    fetch(`http://localhost:3000/api/documentos/despacho/${despacho}`)
         .then(response => response.json())
         .then(data => {
             const tabla = document.getElementById("tabla-documentos").getElementsByTagName("tbody")[0];
             tabla.innerHTML = "";
 
-            const fila = tabla.insertRow();
-            fila.insertCell(0).textContent = data.id;
-            fila.insertCell(1).textContent = data.tipo_documento;
-            fila.insertCell(2).textContent = new Date(data.fecha_recepcion).toLocaleString();
-            fila.insertCell(3).textContent = data.remitente;
-            fila.insertCell(4).textContent = data.despacho_destino;
-            fila.insertCell(5).textContent = data.estado;
+            data.forEach(documento => {
+                const fila = tabla.insertRow();
+
+                fila.insertCell(0).textContent = documento.id_documento;
+                fila.insertCell(1).textContent = documento.codigo;
+                fila.insertCell(2).textContent = documento.tipo;
+                fila.insertCell(3).textContent = new Date(documento.fecha_recepcion).toLocaleString();
+                fila.insertCell(4).textContent = documento.remitente;
+                fila.insertCell(5).textContent = documento.destino;
+            });
         })
         .catch(error => console.error("Error:", error));
 }
