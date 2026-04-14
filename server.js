@@ -11,7 +11,7 @@ const port = 3000;
 
 // Middleware
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "views")));
+app.use(express.static(path.join(__dirname, "view")));
 app.use(session({
     secret: 'secreto',
     resave: false,
@@ -35,29 +35,25 @@ app.use("/api/usuarios", usuarioRoutes);
 
 // Rutas para servir archivos HTML
 app.get("/", requireAuth, (req, res) => {
-    res.sendFile(path.join(__dirname, "views", "index.html"));
+    res.sendFile(path.join(__dirname, "view", "index.html"));
 });
 
 app.get("/login", (req, res) => {
-    res.sendFile(path.join(__dirname, "views", "auth", "login.html"));
-});
-
-app.get("/registro", (req, res) => {
-    res.sendFile(path.join(__dirname, "views", "auth", "registro.html"));
+    res.sendFile(path.join(__dirname, "view", "auth", "login.html"));
 });
 
 app.get("/documentos", requireAuth, (req, res) => {
-    res.sendFile(path.join(__dirname, "views", "documentos", "documento.html"));
+    res.sendFile(path.join(__dirname, "view", "documentos", "documento.html"));
 });
 
 app.get("/remitos", requireAuth, (req, res) => {
-    res.sendFile(path.join(__dirname, "views", "remitos", "remito.html"));
+    res.sendFile(path.join(__dirname, "view", "remitos", "remito.html"));
 });
 
 app.get("/usuarios", requireAuth, (req, res) => {
     // Solo accesible para administradores
     if (req.session.usuario && req.session.usuario.rol === "Administrador") {
-        res.sendFile(path.join(__dirname, "views", "usuarios", "usuario.html"));
+        res.sendFile(path.join(__dirname, "view", "usuarios", "usuario.html"));
     } else {
         res.status(403).send("Acceso denegado");
     }

@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const documentoController = require("../controllers/documentoController");
+const documentoController = require("../controller/documentoController");
 
 router.post("/", documentoController.registrarDocumento);
 router.get("/", documentoController.listarDocumentos);

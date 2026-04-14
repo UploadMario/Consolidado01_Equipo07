@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const remitoController = require("../controllers/remitoController");
+const remitoController = require("../controller/remitoController");
 
 router.post("/", remitoController.registrarRemito);
 router.get("/", remitoController.listarRemitos);
