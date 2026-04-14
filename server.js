@@ -17,7 +17,7 @@ app.use(session({
     saveUninitialized: false,
 }));
 
-// Solo exponer recursos estáticos necesarios, no archivos HTML completos.
+// Solo recursos estáticos
 app.use("/css", express.static(path.join(__dirname, "view", "css")));
 app.use("/js", express.static(path.join(__dirname, "view", "js")));
 app.use("/img", express.static(path.join(__dirname, "view", "img")));
@@ -36,11 +36,13 @@ const requireAdmin = (req, res, next) => {
     return res.status(403).send("Acceso denegado");
 };
 
+// APIs
 app.use("/api/auth", authRoutes);
 app.use("/api/documentos", requireAuth, documentoRoutes);
 app.use("/api/remitos", requireAuth, remitoRoutes);
 app.use("/api/usuarios", requireAuth, requireAdmin, usuarioRoutes);
 
+// Rutas principales
 app.get("/", (req, res) => {
     if (req.session.usuario) {
         return res.redirect("/inicio");
@@ -56,23 +58,54 @@ app.get("/login", (req, res) => {
 });
 
 app.get("/inicio", requireAuth, (req, res) => {
-    res.sendFile(path.join(__dirname, "view", "index.html"));
+    return res.sendFile(path.join(__dirname, "view", "index.html"));
 });
 
+// Documentos
 app.get("/documentos", requireAuth, (req, res) => {
-    res.sendFile(path.join(__dirname, "view", "documentos", "documento.html"));
+    return res.sendFile(path.join(__dirname, "view", "documentos", "documento.html"));
+});
+
+app.get("/documentos/documento", requireAuth, (req, res) => {
+    return res.sendFile(path.join(__dirname, "view", "documentos", "documento.html"));
+});
+
+app.get("/documentos/documento.html", requireAuth, (req, res) => {
+    return res.sendFile(path.join(__dirname, "view", "documentos", "documento.html"));
 });
 
 app.get("/documentos/lista", requireAuth, (req, res) => {
-    res.sendFile(path.join(__dirname, "view", "documentos", "lista.html"));
+    return res.sendFile(path.join(__dirname, "view", "documentos", "lista.html"));
 });
 
+app.get("/documentos/lista.html", requireAuth, (req, res) => {
+    return res.sendFile(path.join(__dirname, "view", "documentos", "lista.html"));
+});
+
+// Remitos
 app.get("/remitos", requireAuth, (req, res) => {
-    res.sendFile(path.join(__dirname, "view", "remitos", "remito.html"));
+    return res.sendFile(path.join(__dirname, "view", "remitos", "remito.html"));
 });
 
+app.get("/remitos/remito", requireAuth, (req, res) => {
+    return res.sendFile(path.join(__dirname, "view", "remitos", "remito.html"));
+});
+
+app.get("/remitos/remito.html", requireAuth, (req, res) => {
+    return res.sendFile(path.join(__dirname, "view", "remitos", "remito.html"));
+});
+
+// Usuarios
 app.get("/usuarios", requireAuth, requireAdmin, (req, res) => {
-    res.sendFile(path.join(__dirname, "view", "usuarios", "usuario.html"));
+    return res.sendFile(path.join(__dirname, "view", "usuarios", "usuario.html"));
+});
+
+app.get("/usuarios/usuario", requireAuth, requireAdmin, (req, res) => {
+    return res.sendFile(path.join(__dirname, "view", "usuarios", "usuario.html"));
+});
+
+app.get("/usuarios/usuario.html", requireAuth, requireAdmin, (req, res) => {
+    return res.sendFile(path.join(__dirname, "view", "usuarios", "usuario.html"));
 });
 
 app.listen(port, () => {

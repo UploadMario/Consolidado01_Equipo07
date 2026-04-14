@@ -2,53 +2,29 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar Documento</title>
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="../css/styles.css">
 </head>
 <body class="page-body">
+
 <header class="topbar">
     <h1>Registrar Documento</h1>
-    <button type="button" onclick="logout()">Cerrar sesión</button>
+    <button onclick="logout()">Cerrar sesión</button>
 </header>
 
-<<<<<<< HEAD
 <nav class="menu">
-    <a href="/inicio">Inicio</a>
-    <a href="/documentos/lista">Lista de documentos</a>
-    <a href="/remitos">Remitos</a>
-    <a id="btn-usuarios" href="/usuarios" style="display:none;">Usuarios</a>
-=======
-<h1>Registrar Documento</h1>
-
-<!-- 🔹 MENÚ -->
-<nav>
-    <button onclick="location.href='lista.html'">📄 Lista de Documentos</button>
-    <button onclick="location.href='../remitos/remito.html'">🚚 Remitos</button>
-
-    <button id="btn-usuarios" onclick="location.href='../usuarios/usuario.html'">
-        👤 Gestión de Usuarios
-    </button>
-
-    <button onclick="logout()">🔐 Cerrar sesión</button>
->>>>>>> 1950aed26938d00186874f3b69d5fd8eda3f0c6e
+    <a href="lista.html">Lista de documentos</a>
+    <a href="../remitos/remito.html">Remitos</a>
+    <a id="btn-usuarios" href="../usuarios/usuario.html">Usuarios</a>
 </nav>
 
 <main class="card">
+
 <form id="form-documento">
-<<<<<<< HEAD
     <div class="form-group">
         <label for="codigo">Código</label>
         <input type="text" id="codigo" required>
     </div>
-=======
-
-    <label>Código:</label>
-    <input type="text" id="codigo" required>
-
-    <label>Tipo de Documento:</label>
-    <input type="text" id="tipo" required>
->>>>>>> 1950aed26938d00186874f3b69d5fd8eda3f0c6e
 
     <div class="form-group">
         <label for="tipo">Tipo de documento</label>
@@ -60,7 +36,6 @@
         <input type="date" id="fecha_recepcion" required>
     </div>
 
-<<<<<<< HEAD
     <div class="form-group">
         <label for="remitente">Remitente</label>
         <input type="text" id="remitente" required>
@@ -80,20 +55,12 @@
 
     <div class="form-actions">
         <button type="submit">Registrar</button>
+        <button type="button" id="btn-agregar-remito">Añadir a Remito</button>
     </div>
-=======
-    <label>Destino:</label>
-    <input type="text" id="destino" required>
-
-    <label>Observaciones:</label>
-    <input type="text" id="observaciones">
-
-
-    <button type="submit">Registrar</button>
->>>>>>> 1950aed26938d00186874f3b69d5fd8eda3f0c6e
 </form>
+
 </main>
 
-<script src="/js/app.js"></script>
+<script src="../js/app.js"></script>
 </body>
 </html>

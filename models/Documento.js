@@ -1,4 +1,4 @@
-const db = require("../config/db");
+const db = require('../config/db');
 
 const Documento = {
   listar: async () => {
@@ -12,7 +12,10 @@ const Documento = {
   },
 
   buscarPorCodigo: async (codigo) => {
-    const [rows] = await db.query("SELECT * FROM documentos WHERE codigo = ?", [codigo]);
+    const [rows] = await db.query(
+      'SELECT * FROM documentos WHERE codigo = ?',
+      [codigo]
+    );
     return rows[0];
   },
 
@@ -48,14 +51,23 @@ const Documento = {
       destino,
       observaciones,
       estado,
-      id_usuario,
+      id_usuario
     } = data;
 
     const [result] = await db.query(
       `INSERT INTO documentos
       (codigo, tipo, fecha_recepcion, remitente, destino, estado, observaciones, id_usuario)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-      [codigo, tipo, fecha_recepcion, remitente, destino, estado, observaciones, id_usuario]
+      [
+        codigo,
+        tipo,
+        fecha_recepcion,
+        remitente,
+        destino,
+        estado,
+        observaciones,
+        id_usuario
+      ]
     );
 
     return result;
@@ -63,11 +75,11 @@ const Documento = {
 
   actualizarEstado: async (id, estado) => {
     const [result] = await db.query(
-      "UPDATE documentos SET estado = ? WHERE id_documento = ?",
+      'UPDATE documentos SET estado = ? WHERE id_documento = ?',
       [estado, id]
     );
-    return result.affectedRows > 0;
-  },
+    return result;
+  }
 };
 
 module.exports = Documento;
