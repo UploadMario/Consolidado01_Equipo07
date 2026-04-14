@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar Documento</title>
+    <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+
+<h1>Registrar Documento</h1>
+
+<!-- 🔹 MENÚ -->
+<nav>
+    <button onclick="location.href='lista.html'">📄 Lista de Documentos</button>
+    <button onclick="location.href='../remitos/remito.html'">🚚 Remitos</button>
+
+    <!-- 👇 SOLO ADMIN -->
+    <button id="btn-usuarios" onclick="location.href='../usuarios/usuario.html'">
+        👤 Gestión de Usuarios
+    </button>
+
+    <button onclick="logout()">🔐 Cerrar sesión</button>
+</nav>
+
+<hr>
+
+<!-- 🔹 FORMULARIO -->
+<form id="form-documento">
+    <label>Tipo de Documento:</label>
+    <input type="text" id="tipo_documento" required>
+
+    <label>Fecha de Recepción:</label>
+    <input type="datetime-local" id="fecha_recepcion" required>
+
+    <label>Remitente:</label>
+    <input type="text" id="remitente" required>
+
+    <label>Despacho de Destino:</label>
+    <input type="text" id="despacho_destino" required>
+
+    <input type="hidden" id="estado" value="pendiente">
+
+    <button type="submit">Registrar</button>
+    <button type="button" id="btn-agregar-remito">Añadir a Remito</button>
+</form>
+
+<script src="../js/app.js"></script>
+
+</body>
+</html>
