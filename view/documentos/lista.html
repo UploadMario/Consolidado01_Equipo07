@@ -2,63 +2,91 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lista de Documentos</title>
     <link rel="stylesheet" href="../css/styles.css" />
-    <style>
-      .aprobar {
-        background-color: #4caf50;
-        color: white;
-      }
-      .rechazar {
-        background-color: #f44336;
-        color: white;
-      }
-    </style>
   </head>
-  <body>
-
-    <!-- SIDEBAR -->
+  <body class="page-body">
     <div id="sidebar-container"></div>
 
-    <!-- CONTENIDO -->
-    <main class="contenido">
-      <h1>Lista de Documentos</h1>
+    <main class="contenido contenido-con-sidebar">
+      <section class="page-header">
+        <div>
+          <p class="eyebrow">Consultas</p>
+          <h1>Lista de Documentos</h1>
+          <p>Busca por código y filtra por despacho o estado para revisar la trazabilidad del documento.</p>
+        </div>
+      </section>
 
-      <div class="search-container">
-        <input type="text" id="buscar-documento" placeholder="Buscar por ID" />
-        <input type="text" id="filtrar-destino" placeholder="Filtrar por Destino" />
+      <p id="aviso-documentos-rechazados" class="warning-message"></p>
+      <p id="error-lista-documentos" class="error-message"></p>
+
+      <section class="card compact-card">
+        <div class="grid-form three-columns">
+          <div class="form-group">
+            <label for="buscar-codigo">Buscar por código</label>
+            <input type="text" id="buscar-codigo" placeholder="Ej.: DOC00001" maxlength="20" />
+          </div>
+
+          <div class="form-group">
+            <label for="filtrar-destino">Ver documentos por despacho</label>
+            <select id="filtrar-destino">
+              <option value="">Todos los despachos</option>
+              <option value="Finanzas">Finanzas</option>
+              <option value="Legal">Legal</option>
+              <option value="Archivos">Archivos</option>
+              <option value="Marketing">Marketing</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="filtrar-estado">Ver estado</label>
+            <select id="filtrar-estado">
+              <option value="">Todos los estados</option>
+              <option value="Pendiente de entrega">Pendiente de entrega</option>
+              <option value="Cargo de envío">Cargo de envío</option>
+              <option value="Cargo devuelto entregado">Cargo devuelto entregado</option>
+              <option value="No recepcionado (notificado)">No recepcionado (notificado)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" id="btn-limpiar-filtros">Limpiar filtros</button>
+          <button type="button" onclick="retrocederPagina()" class="btn-secondary">Volver</button>
+        </div>
+      </section>
+
+      <div class="card table-card">
+        <table id="tabla-documentos">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Código</th>
+              <th>Tipo</th>
+              <th>Fecha de recepción</th>
+              <th>Remitente</th>
+              <th>Despacho</th>
+              <th>Estado</th>
+              <th>Registrado por</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </div>
-
-      <table id="tabla-documentos">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Código</th>
-            <th>Tipo</th>
-            <th>Fecha de Recepción</th>
-            <th>Remitente</th>
-            <th>Destino</th>
-            <th>Estado</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
     </main>
 
     <script src="../js/app.js"></script>
-
     <script>
       fetch("../components/sidebar.html")
-        .then(res => res.text())
-        .then(data => {
+        .then((res) => res.text())
+        .then((data) => {
           document.getElementById("sidebar-container").innerHTML = data;
+          if (typeof actualizarVisibilidadPorRol === "function") {
+            actualizarVisibilidadPorRol();
+          }
         });
-
-      function toggleMenu() {
-        document.getElementById("sidebar").classList.toggle("active");
-      }
     </script>
-
   </body>
 </html>

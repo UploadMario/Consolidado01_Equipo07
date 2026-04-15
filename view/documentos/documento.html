@@ -6,53 +6,79 @@
     <title>Registrar Documento</title>
     <link rel="stylesheet" href="../css/styles.css" />
   </head>
-  <body>
-
-    <!-- SIDEBAR -->
+  <body class="page-body">
     <div id="sidebar-container"></div>
 
-    <!-- CONTENIDO -->
-    <main class="contenido">
-      <h1>Registrar Documento</h1>
+    <main class="contenido contenido-con-sidebar">
+      <section class="page-header">
+        <div>
+          <p class="eyebrow">Sistema de distribución documental</p>
+          <h1>Registrar Documento</h1>
+          <p>Registra documentos con código único, despacho destino y estado inicial pendiente de entrega.</p>
+        </div>
+      </section>
 
-      <form id="form-documento">
-        <label>Tipo de Documento:</label>
-        <input type="text" id="tipo" required />
+      <form id="form-documento" class="card form-card">
+        <div class="grid-form two-columns">
+          <div class="form-group">
+            <label for="tipo">Tipo de documento</label>
+            <input type="text" id="tipo" maxlength="100" minlength="3" required placeholder="Ej.: Oficio, Carta, Solicitud" />
+            <small>Entre 3 y 100 caracteres.</small>
+          </div>
 
-        <label>Fecha de Recepción:</label>
-        <input type="date" id="fecha_recepcion" required />
+          <div class="form-group">
+            <label for="fecha_recepcion">Fecha de recepción</label>
+            <input type="date" id="fecha_recepcion" required />
+            <small>No puede ser una fecha futura.</small>
+          </div>
 
-        <label>Remitente:</label>
-        <input type="text" id="remitente" required />
+          <div class="form-group">
+            <label for="remitente">Remitente</label>
+            <input type="text" id="remitente" maxlength="150" minlength="3" required placeholder="Nombre de la persona o entidad remitente" />
+            <small>Entre 3 y 150 caracteres.</small>
+          </div>
 
-        <label>Destino:</label>
-        <select id="destino" required>
-          <option value="Finanzas">Finanzas</option>
-          <option value="Legal">Legal</option>
-          <option value="Archivos">Archivos</option>
-          <option value="Marketing">Marketing</option>
-        </select>
+          <div class="form-group">
+            <label for="destino">Despacho destino</label>
+            <select id="destino" required>
+              <option value="">Seleccione un despacho</option>
+              <option value="Finanzas">Finanzas</option>
+              <option value="Legal">Legal</option>
+              <option value="Archivos">Archivos</option>
+              <option value="Marketing">Marketing</option>
+            </select>
+            <small>Selecciona el área responsable.</small>
+          </div>
+        </div>
 
-        <label>Observaciones:</label>
-        <textarea id="observaciones"></textarea>
+        <div class="form-group">
+          <label for="observaciones">Observaciones</label>
+          <textarea id="observaciones" maxlength="255" placeholder="Datos adicionales del documento, referencia o notas"></textarea>
+          <small>Opcional. Máximo 255 caracteres.</small>
+        </div>
 
-        <button type="submit">Registrar</button>
+        <div class="status-box info-box">
+          <strong>Estado inicial:</strong> Pendiente de entrega.
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" onclick="retrocederPagina()">Volver</button>
+          <button type="submit">Registrar documento</button>
+        </div>
+        <p id="error-documento" class="error-message"></p>
       </form>
     </main>
 
     <script src="../js/app.js"></script>
-
     <script>
       fetch("../components/sidebar.html")
-        .then(res => res.text())
-        .then(data => {
+        .then((res) => res.text())
+        .then((data) => {
           document.getElementById("sidebar-container").innerHTML = data;
+          if (typeof actualizarVisibilidadPorRol === "function") {
+            actualizarVisibilidadPorRol();
+          }
         });
-
-      function toggleMenu() {
-        document.getElementById("sidebar").classList.toggle("active");
-      }
     </script>
-
   </body>
 </html>

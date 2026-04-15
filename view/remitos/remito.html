@@ -2,34 +2,90 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gestión de Remitos</title>
     <link rel="stylesheet" href="../css/styles.css" />
   </head>
-  <body>
-
-    <!-- SIDEBAR -->
+  <body class="page-body">
     <div id="sidebar-container"></div>
 
-    <!-- CONTENIDO -->
-    <main class="contenido">
-      <h1>Gestión de Remitos</h1>
+    <main class="contenido contenido-con-sidebar">
+      <section class="page-header">
+        <div>
+          <p class="eyebrow">Guías y remitos</p>
+          <h1>Gestión de Remitos</h1>
+          <p>Selecciona qué documentos enviar, a qué despacho y a quién será dirigido el cargo.</p>
+        </div>
+      </section>
 
-      <div id="documentos-por-destino"></div>
+      <p id="error-remitos" class="error-message"></p>
+
+      <section class="card form-card">
+        <h2>Generar guía / remito</h2>
+        <div class="grid-form two-columns">
+          <div class="form-group">
+            <label for="remito-destino">Despacho destino</label>
+            <select id="remito-destino" required>
+              <option value="">Seleccione un despacho</option>
+              <option value="Finanzas">Finanzas</option>
+              <option value="Legal">Legal</option>
+              <option value="Archivos">Archivos</option>
+              <option value="Marketing">Marketing</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="remito-destinatario">¿A quién se envía?</label>
+            <input type="text" id="remito-destinatario" maxlength="120" minlength="3" placeholder="Nombre del responsable que recibirá el cargo" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="remito-descripcion">Descripción del remito</label>
+          <textarea id="remito-descripcion" maxlength="255" placeholder="Ej.: Entrega de documentos correspondientes al despacho de Legal" required></textarea>
+        </div>
+
+        <div class="status-box info-box">
+          <strong>Regla:</strong> solo se pueden enviar documentos con estado <strong>Pendiente de entrega</strong> y del mismo despacho.
+        </div>
+
+        <div id="documentos-por-destino"></div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" onclick="retrocederPagina()">Volver</button>
+          <button type="button" id="btn-generar-remito">Generar remito</button>
+        </div>
+      </section>
+
+      <section class="card table-card">
+        <h2>Historial de remitos</h2>
+        <table id="tabla-remitos">
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Despacho</th>
+              <th>Destinatario</th>
+              <th>Descripción</th>
+              <th>Documentos</th>
+              <th>Generado por</th>
+              <th>Fecha</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
     </main>
 
     <script src="../js/app.js"></script>
-
     <script>
       fetch("../components/sidebar.html")
-        .then(res => res.text())
-        .then(data => {
+        .then((res) => res.text())
+        .then((data) => {
           document.getElementById("sidebar-container").innerHTML = data;
+          if (typeof actualizarVisibilidadPorRol === "function") {
+            actualizarVisibilidadPorRol();
+          }
         });
-
-      function toggleMenu() {
-        document.getElementById("sidebar").classList.toggle("active");
-      }
     </script>
-
   </body>
 </html>

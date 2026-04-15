@@ -1,9 +1,8 @@
--- Crear la base de datos
-CREATE DATABASE IF NOT EXISTS sistema_documentos;
+DROP DATABASE IF EXISTS sistema_documentos;
+CREATE DATABASE sistema_documentos;
 USE sistema_documentos;
 
--- Tabla de usuarios
-CREATE TABLE IF NOT EXISTS usuarios (
+CREATE TABLE usuarios (
     id_usuario INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     correo VARCHAR(100) NOT NULL UNIQUE,
@@ -12,15 +11,14 @@ CREATE TABLE IF NOT EXISTS usuarios (
     fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
--- Tabla de documentos
-CREATE TABLE IF NOT EXISTS documentos (
+CREATE TABLE documentos (
     id_documento INT AUTO_INCREMENT PRIMARY KEY,
     codigo VARCHAR(20) NOT NULL UNIQUE,
     tipo VARCHAR(100) NOT NULL,
     fecha_recepcion DATE NOT NULL,
     remitente VARCHAR(150) NOT NULL,
     destino ENUM('Finanzas', 'Legal', 'Archivos', 'Marketing') NOT NULL,
-    estado ENUM('Pendiente', 'Enviado', 'Aprobado', 'Rechazado') NOT NULL DEFAULT 'Pendiente',
+    estado ENUM('Pendiente de entrega', 'Cargo de envío', 'Cargo devuelto entregado', 'No recepcionado (notificado)') NOT NULL DEFAULT 'Pendiente de entrega',
     observaciones VARCHAR(255),
     id_usuario INT,
     fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -30,17 +28,21 @@ CREATE TABLE IF NOT EXISTS documentos (
         ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
--- Tabla de remitos
-CREATE TABLE IF NOT EXISTS remitos (
+CREATE TABLE remitos (
     id_remito INT AUTO_INCREMENT PRIMARY KEY,
     codigo VARCHAR(20) NOT NULL UNIQUE,
     despacho_destino ENUM('Finanzas', 'Legal', 'Archivos', 'Marketing') NOT NULL,
+    destinatario VARCHAR(120) NOT NULL,
     descripcion VARCHAR(255) NOT NULL,
-    fecha_generacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    id_usuario INT,
+    fecha_generacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_remito_usuario
+        FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
+        ON UPDATE CASCADE
+        ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
--- Tabla de detalle_remito (relación entre remitos y documentos)
-CREATE TABLE IF NOT EXISTS detalle_remito (
+CREATE TABLE detalle_remito (
     id_detalle INT AUTO_INCREMENT PRIMARY KEY,
     id_remito INT NOT NULL,
     id_documento INT NOT NULL,
@@ -56,8 +58,18 @@ CREATE TABLE IF NOT EXISTS detalle_remito (
     CONSTRAINT uq_remito_documento UNIQUE (id_remito, id_documento)
 ) ENGINE=InnoDB;
 
--- Insertar datos de ejemplo para usuarios
 INSERT INTO usuarios (nombre, correo, contrasena, rol) VALUES
-('Administrador', 'admin@sistema.com', '123456', 'admin'),
-('Operador 1', 'operador1@sistema.com', '123456', 'Operador'),
-('Firmante 1', 'firmante1@sistema.com', '123456', 'Firmante');
+('Administrador', 'admin@sistema.com', '$2b$10$d.FzRMaSsOax41hYTRpXH.Of41iezevLwlbPikAOW0.G0zKV.24hO', 'admin'),
+('Operador 1', 'operador1@sistema.com', '$2b$10$uqlzNXMwoCY1DAY0c.tka.DMlsvMKi1mEaRv2Ty25XiE59o/wCBgO', 'Operador'),
+('Firmante 1', 'firmante1@sistema.com', '$2b$10$7WbG7ypKmLD9c3QYa4upguZkTEW0J6zaIEMUcZ8w/6Lm3LIH11lqK', 'Firmante');
+
+INSERT INTO documentos (codigo, tipo, fecha_recepcion, remitente, destino, estado) VALUES
+('DOC001', 'Oficio', '2026-04-15', 'Municipalidad de Huancayo', 'Legal', 'Pendiente de entrega'),
+('DOC002', 'Informe', '2026-04-15', 'SUNAT', 'Legal', 'Pendiente de entrega'),
+('DOC003', 'Carta', '2026-04-15', 'Ministerio de Salud', 'Legal', 'Pendiente de entrega'),
+
+('DOC004', 'Memorando', '2026-04-15', 'Gerencia General', 'Finanzas', 'Pendiente de entrega'),
+('DOC005', 'Solicitud', '2026-04-15', 'Proveedor XYZ', 'Finanzas', 'Pendiente de entrega'),
+
+('DOC006', 'Reporte', '2026-04-15', 'Área de Sistemas', 'Marketing', 'Pendiente de entrega'),
+('DOC007', 'Acta', '2026-04-15', 'Recursos Humanos', 'Archivos', 'Pendiente de entrega');

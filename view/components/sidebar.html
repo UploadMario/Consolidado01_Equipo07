@@ -1,12 +1,22 @@
 <aside id="sidebar" class="sidebar">
-  <h2>📁 Menú</h2>
+  <div class="sidebar-header">
+    <h2>📁 Menú</h2>
+    <button type="button" class="sidebar-close" onclick="toggleMenu()">✕</button>
+  </div>
 
-  <a href="/view/documentos/documento.html">📄 Registrar Documento</a>
-  <a href="/view/documentos/lista.html">📋 Lista de Documentos</a>
-  <a href="/view/remitos/remito.html">🚚 Remitos</a>
-  <a id="btn-usuarios" href="/view/usuarios/usuario.html">👤 Usuarios</a>
+  <nav class="sidebar-nav">
+    <a href="/index.html">🏠 Inicio</a>
+    <a href="/documentos/documento.html">📄 Registrar Documento</a>
+    <a href="/documentos/lista.html">📋 Lista de Documentos</a>
+    <a href="/remitos/remito.html">🚚 Remitos</a>
+    <a id="btn-usuarios" href="/usuarios/usuario.html">👤 Usuarios</a>
+  </nav>
 
-  <button onclick="logout()">🔐 Cerrar sesión</button>
+  <div class="sidebar-actions">
+    <button type="button" class="btn-secondary" onclick="retrocederPagina()">↩ Retroceder</button>
+    <button type="button" onclick="logout()">🔐 Cerrar sesión</button>
+  </div>
 </aside>
 
-<button class="menu-toggle" onclick="toggleMenu()">☰</button>
+<div id="sidebar-overlay" class="sidebar-overlay" onclick="toggleMenu()"></div>
+<button type="button" class="menu-toggle" onclick="toggleMenu()">☰</button>
