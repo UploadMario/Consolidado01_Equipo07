@@ -26,7 +26,10 @@ async function apiFetch(url, options = {}) {
     : await response.text();
 
   if (!response.ok) {
-    const message = typeof data === "object" && data?.error ? data.error : "Ocurrió un error inesperado";
+    const message =
+      typeof data === "object" && data?.error
+        ? data.error
+        : "Ocurrió un error inesperado";
     throw new Error(message);
   }
 
@@ -124,7 +127,8 @@ function actualizarVisibilidadPorRol() {
   const btnUsuarios = document.getElementById("btn-usuarios");
 
   if (btnUsuarios) {
-    btnUsuarios.style.display = usuario && usuario.rol === "admin" ? "block" : "none";
+    btnUsuarios.style.display =
+      usuario && usuario.rol === "admin" ? "block" : "none";
   }
 }
 
@@ -192,19 +196,31 @@ function dibujarFilaDocumento(tablaBody, documento) {
   const celdaAcciones = fila.insertCell(8);
   const usuario = obtenerUsuarioLocal();
 
-  if (usuario && usuario.rol === "Firmante" && documento.estado === "Cargo de envío") {
+  if (
+    usuario &&
+    usuario.rol === "Firmante" &&
+    documento.estado === "Cargo de envío"
+  ) {
     const contenedor = document.createElement("div");
     contenedor.className = "action-group";
 
     const botonEntregado = document.createElement("button");
     botonEntregado.textContent = "Recepcionado";
     botonEntregado.className = "action-approve";
-    botonEntregado.onclick = () => actualizarEstadoDocumento(documento.id_documento, "Cargo devuelto entregado");
+    botonEntregado.onclick = () =>
+      actualizarEstadoDocumento(
+        documento.id_documento,
+        "Cargo devuelto entregado",
+      );
 
     const botonNoRecepcionado = document.createElement("button");
     botonNoRecepcionado.textContent = "No recepcionado";
     botonNoRecepcionado.className = "action-reject";
-    botonNoRecepcionado.onclick = () => actualizarEstadoDocumento(documento.id_documento, "No recepcionado (notificado)");
+    botonNoRecepcionado.onclick = () =>
+      actualizarEstadoDocumento(
+        documento.id_documento,
+        "No recepcionado (notificado)",
+      );
 
     contenedor.appendChild(botonEntregado);
     contenedor.appendChild(botonNoRecepcionado);
@@ -225,11 +241,15 @@ async function cargarDocumentos() {
     if (destino) query.set("destino", destino);
     if (estado) query.set("estado", estado);
 
-    const ruta = query.toString() ? `/api/documentos?${query.toString()}` : "/api/documentos";
+    const ruta = query.toString()
+      ? `/api/documentos?${query.toString()}`
+      : "/api/documentos";
     const data = await apiFetch(ruta, { method: "GET" });
     cacheDocumentos = data;
 
-    const tabla = document.getElementById("tabla-documentos")?.getElementsByTagName("tbody")[0];
+    const tabla = document
+      .getElementById("tabla-documentos")
+      ?.getElementsByTagName("tbody")[0];
     if (!tabla) {
       return;
     }
@@ -273,12 +293,15 @@ function verificarDocumentosRequierenAtencion(documentos = []) {
   }
 
   const observados = documentos.filter(
-    (doc) => doc.estado === "No recepcionado (notificado)" && doc.id_usuario === usuario.id_usuario,
+    (doc) =>
+      doc.estado === "No recepcionado (notificado)" &&
+      doc.id_usuario === usuario.id_usuario,
   );
 
-  aviso.textContent = observados.length > 0
-    ? `Tienes ${observados.length} documento(s) no recepcionado(s) que requieren seguimiento.`
-    : "";
+  aviso.textContent =
+    observados.length > 0
+      ? `Tienes ${observados.length} documento(s) no recepcionado(s) que requieren seguimiento.`
+      : "";
 }
 
 function renderDocumentosSeleccionables() {
@@ -287,14 +310,18 @@ function renderDocumentosSeleccionables() {
     return;
   }
 
-  const destinoSeleccionado = document.getElementById("remito-destino")?.value || "";
-  const pendientes = cacheDocumentos.filter((doc) => doc.estado === "Pendiente de entrega");
+  const destinoSeleccionado =
+    document.getElementById("remito-destino")?.value || "";
+  const pendientes = cacheDocumentos.filter(
+    (doc) => doc.estado === "Pendiente de entrega",
+  );
   const filtrados = destinoSeleccionado
     ? pendientes.filter((doc) => doc.destino === destinoSeleccionado)
     : pendientes;
 
   if (filtrados.length === 0) {
-    contenedor.innerHTML = '<div class="empty-state">No hay documentos pendientes de entrega para el filtro seleccionado.</div>';
+    contenedor.innerHTML =
+      '<div class="empty-state">No hay documentos pendientes de entrega para el filtro seleccionado.</div>';
     return;
   }
 
@@ -323,7 +350,9 @@ async function cargarRemitos() {
 
     const remitos = await apiFetch("/api/remitos", { method: "GET" });
     cacheRemitos = remitos;
-    const tabla = document.getElementById("tabla-remitos")?.getElementsByTagName("tbody")[0];
+    const tabla = document
+      .getElementById("tabla-remitos")
+      ?.getElementsByTagName("tbody")[0];
     if (!tabla) {
       return;
     }
@@ -357,9 +386,12 @@ function obtenerDocumentosSeleccionados() {
 
 async function generarRemito() {
   limpiarError("error-remitos");
-  const despacho_destino = document.getElementById("remito-destino")?.value || "";
-  const destinatario = document.getElementById("remito-destinatario")?.value.trim() || "";
-  const descripcion = document.getElementById("remito-descripcion")?.value.trim() || "";
+  const despacho_destino =
+    document.getElementById("remito-destino")?.value || "";
+  const destinatario =
+    document.getElementById("remito-destinatario")?.value.trim() || "";
+  const descripcion =
+    document.getElementById("remito-descripcion")?.value.trim() || "";
   const documentos = obtenerDocumentosSeleccionados();
 
   if (!DESTINOS.includes(despacho_destino)) {
@@ -373,7 +405,10 @@ async function generarRemito() {
   }
 
   if (descripcion.length < 5) {
-    mostrarError("error-remitos", "La descripción del remito debe tener al menos 5 caracteres.");
+    mostrarError(
+      "error-remitos",
+      "La descripción del remito debe tener al menos 5 caracteres.",
+    );
     return;
   }
 
@@ -385,7 +420,12 @@ async function generarRemito() {
   try {
     const data = await apiFetch("/api/remitos", {
       method: "POST",
-      body: JSON.stringify({ despacho_destino, destinatario, descripcion, documentos }),
+      body: JSON.stringify({
+        despacho_destino,
+        destinatario,
+        descripcion,
+        documentos,
+      }),
     });
 
     alert(`Remito generado con éxito. Código: ${data.remito.codigo}`);
@@ -400,7 +440,9 @@ async function generarRemito() {
 async function cargarUsuarios() {
   try {
     const data = await apiFetch("/api/usuarios", { method: "GET" });
-    const tabla = document.getElementById("tabla-usuarios")?.getElementsByTagName("tbody")[0];
+    const tabla = document
+      .getElementById("tabla-usuarios")
+      ?.getElementsByTagName("tbody")[0];
     if (!tabla) {
       return;
     }
@@ -474,7 +516,10 @@ function inicializarLogin() {
     }
 
     if (contrasena.length < 6) {
-      mostrarError("error-login", "La contraseña debe tener al menos 6 caracteres.");
+      mostrarError(
+        "error-login",
+        "La contraseña debe tener al menos 6 caracteres.",
+      );
       return;
     }
 
@@ -516,17 +561,26 @@ function inicializarRegistroDocumento() {
     };
 
     if (payload.tipo.length < 3) {
-      mostrarError("error-documento", "El tipo de documento debe tener al menos 3 caracteres.");
+      mostrarError(
+        "error-documento",
+        "El tipo de documento debe tener al menos 3 caracteres.",
+      );
       return;
     }
 
     if (!esFechaNoFutura(payload.fecha_recepcion)) {
-      mostrarError("error-documento", "La fecha de recepción no puede ser futura.");
+      mostrarError(
+        "error-documento",
+        "La fecha de recepción no puede ser futura.",
+      );
       return;
     }
 
     if (payload.remitente.length < 3) {
-      mostrarError("error-documento", "El remitente debe tener al menos 3 caracteres.");
+      mostrarError(
+        "error-documento",
+        "El remitente debe tener al menos 3 caracteres.",
+      );
       return;
     }
 
@@ -541,7 +595,9 @@ function inicializarRegistroDocumento() {
         body: JSON.stringify(payload),
       });
 
-      alert(`Documento registrado con éxito. Código generado: ${data.documento.codigo}`);
+      alert(
+        `Documento registrado con éxito. Código generado: ${data.documento.codigo}`,
+      );
       formDocumento.reset();
     } catch (error) {
       mostrarError("error-documento", error.message);
@@ -571,13 +627,15 @@ function inicializarListaDocumentos() {
     cargarDocumentos();
   });
 
-  document.getElementById("btn-limpiar-filtros")?.addEventListener("click", () => {
-    document.getElementById("buscar-codigo").value = "";
-    document.getElementById("filtrar-destino").value = "";
-    document.getElementById("filtrar-estado").value = "";
-    limpiarError("error-lista-documentos");
-    cargarDocumentos();
-  });
+  document
+    .getElementById("btn-limpiar-filtros")
+    ?.addEventListener("click", () => {
+      document.getElementById("buscar-codigo").value = "";
+      document.getElementById("filtrar-destino").value = "";
+      document.getElementById("filtrar-estado").value = "";
+      limpiarError("error-lista-documentos");
+      cargarDocumentos();
+    });
 }
 
 function inicializarRemitos() {
@@ -590,7 +648,9 @@ function inicializarRemitos() {
     renderDocumentosSeleccionables();
   });
 
-  document.getElementById("btn-generar-remito")?.addEventListener("click", generarRemito);
+  document
+    .getElementById("btn-generar-remito")
+    ?.addEventListener("click", generarRemito);
   cargarRemitos();
 }
 
@@ -609,7 +669,10 @@ function inicializarUsuarios() {
       };
 
       if (payload.nombre.length < 3) {
-        mostrarError("error-usuarios", "El nombre debe tener al menos 3 caracteres.");
+        mostrarError(
+          "error-usuarios",
+          "El nombre debe tener al menos 3 caracteres.",
+        );
         return;
       }
 
@@ -619,7 +682,10 @@ function inicializarUsuarios() {
       }
 
       if (!/^(?=.*[A-Za-z])(?=.*\d).{6,}$/.test(payload.contrasena)) {
-        mostrarError("error-usuarios", "La contraseña debe incluir al menos una letra, un número y 6 caracteres.");
+        mostrarError(
+          "error-usuarios",
+          "La contraseña debe incluir al menos una letra, un número y 6 caracteres.",
+        );
         return;
       }
 
