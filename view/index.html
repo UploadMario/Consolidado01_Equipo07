@@ -1,29 +1,30 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Principal</title>
-    <link rel="stylesheet" href="/css/styles.css">
-</head>
-<body class="page-body">
-<header class="topbar">
-    <h1>Sistema de Gestión de Documentos</h1>
-    <button type="button" onclick="logout()">Cerrar sesión</button>
-</header>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Menú Principal</title>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <h1>Sistema de Documentos</h1>
 
-<main class="card">
-    <h2>Bienvenido</h2>
-    <p id="texto-bienvenida">Cargando usuario...</p>
-
-    <nav class="menu">
-        <a href="/documentos">Registrar documento</a>
-        <a href="/documentos/lista">Lista de documentos</a>
-        <a href="/remitos">Remitos</a>
-        <a id="btn-usuarios" href="/usuarios" style="display:none;">Usuarios</a>
+    <nav>
+      <button onclick="location.href = 'documentos/documento.html'">
+        Registrar Documento
+      </button>
+      <button onclick="location.href = 'documentos/lista.html'">
+        Lista de Documentos
+      </button>
+      <button onclick="location.href = 'remitos/remito.html'">Remitos</button>
+      <button
+        id="btn-usuarios"
+        onclick="location.href = 'usuarios/usuario.html'"
+      >
+        Gestión de Usuarios
+      </button>
+      <button onclick="logout()">Cerrar sesión</button>
     </nav>
-</main>
 
-<script src="/js/app.js"></script>
-</body>
+    <script src="js/app.js"></script>
+  </body>
 </html>

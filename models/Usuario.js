@@ -1,32 +1,38 @@
-const db = require("../config/db");
+const pool = require("../config/db");
 
-const Usuario = {
-  listar: async () => {
-    const [rows] = await db.query(
-      "SELECT id_usuario, nombre, correo, rol, fecha_creacion FROM usuarios ORDER BY id_usuario DESC"
+class Usuario {
+  static async crear(nombre, correo, contrasena, rol) {
+    const connection = await pool.getConnection();
+    const [result] = await connection.query(
+      "INSERT INTO usuarios (nombre, correo, contrasena, rol) VALUES (?, ?, ?, ?)",
+      [nombre, correo, contrasena, rol],
     );
-    return rows;
-  },
+    connection.release();
+    return result.insertId;
+  }
 
-  buscarPorCorreo: async (correo) => {
-    const [rows] = await db.query("SELECT * FROM usuarios WHERE correo = ?", [correo]);
+  static async buscarPorCorreo(correo) {
+    const connection = await pool.getConnection();
+    const [rows] = await connection.query(
+      "SELECT * FROM usuarios WHERE correo = ?",
+      [correo],
+    );
+    connection.release();
     return rows[0];
-  },
+  }
 
-  crear: async ({ nombre, correo, contrasena, rol }) => {
-    const [result] = await db.query(
-      `INSERT INTO usuarios
-      (nombre, correo, contrasena, rol)
-      VALUES (?, ?, ?, ?)`,
-      [nombre, correo, contrasena, rol]
-    );
-    return result;
-  },
+  static async listar() {
+    const connection = await pool.getConnection();
+    const [rows] = await connection.query("SELECT * FROM usuarios");
+    connection.release();
+    return rows;
+  }
 
-  eliminar: async (id_usuario) => {
-    const [result] = await db.query("DELETE FROM usuarios WHERE id_usuario = ?", [id_usuario]);
-    return result.affectedRows > 0;
-  },
-};
+  static async eliminar(id) {
+    const connection = await pool.getConnection();
+    await connection.query("DELETE FROM usuarios WHERE id_usuario = ?", [id]);
+    connection.release();
+  }
+}
 
 module.exports = Usuario;

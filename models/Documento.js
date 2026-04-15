@@ -1,85 +1,67 @@
-const db = require('../config/db');
+const pool = require("../config/db");
 
-const Documento = {
-  listar: async () => {
-    const [rows] = await db.query(
-      `SELECT d.*, u.nombre AS usuario_registro
-       FROM documentos d
-       LEFT JOIN usuarios u ON d.id_usuario = u.id_usuario
-       ORDER BY d.id_documento DESC`
-    );
-    return rows;
-  },
-
-  buscarPorCodigo: async (codigo) => {
-    const [rows] = await db.query(
-      'SELECT * FROM documentos WHERE codigo = ?',
-      [codigo]
-    );
-    return rows[0];
-  },
-
-  buscarPorId: async (id) => {
-    const [rows] = await db.query(
-      `SELECT d.*, u.nombre AS usuario_registro
-       FROM documentos d
-       LEFT JOIN usuarios u ON d.id_usuario = u.id_usuario
-       WHERE d.id_documento = ?`,
-      [id]
-    );
-    return rows[0];
-  },
-
-  filtrarPorDestino: async (destino) => {
-    const [rows] = await db.query(
-      `SELECT d.*, u.nombre AS usuario_registro
-       FROM documentos d
-       LEFT JOIN usuarios u ON d.id_usuario = u.id_usuario
-       WHERE d.destino LIKE ?
-       ORDER BY d.id_documento DESC`,
-      [`%${destino}%`]
-    );
-    return rows;
-  },
-
-  crear: async (data) => {
-    const {
-      codigo,
-      tipo,
-      fecha_recepcion,
-      remitente,
-      destino,
-      observaciones,
-      estado,
-      id_usuario
-    } = data;
-
-    const [result] = await db.query(
-      `INSERT INTO documentos
-      (codigo, tipo, fecha_recepcion, remitente, destino, estado, observaciones, id_usuario)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+class Documento {
+  static async crear(
+    codigo,
+    tipo,
+    fecha_recepcion,
+    remitente,
+    destino,
+    observaciones,
+    id_usuario,
+  ) {
+    const connection = await pool.getConnection();
+    const [result] = await connection.query(
+      "INSERT INTO documentos (codigo, tipo, fecha_recepcion, remitente, destino, observaciones, id_usuario) VALUES (?, ?, ?, ?, ?, ?, ?)",
       [
         codigo,
         tipo,
         fecha_recepcion,
         remitente,
         destino,
-        estado,
         observaciones,
-        id_usuario
-      ]
+        id_usuario,
+      ],
     );
-
-    return result;
-  },
-
-  actualizarEstado: async (id, estado) => {
-    const [result] = await db.query(
-      'UPDATE documentos SET estado = ? WHERE id_documento = ?',
-      [estado, id]
-    );
-    return result;
+    connection.release();
+    return result.insertId;
   }
-};
+
+  static async listar() {
+    const connection = await pool.getConnection();
+    const [rows] = await connection.query("SELECT * FROM documentos");
+    connection.release();
+    return rows;
+  }
+
+  static async buscarPorId(id) {
+    const connection = await pool.getConnection();
+    const [rows] = await connection.query(
+      "SELECT * FROM documentos WHERE id_documento = ?",
+      [id],
+    );
+    connection.release();
+    return rows[0];
+  }
+
+  static async filtrarPorDestino(destino) {
+    const connection = await pool.getConnection();
+    const [rows] = await connection.query(
+      "SELECT * FROM documentos WHERE destino = ?",
+      [destino],
+    );
+    connection.release();
+    return rows;
+  }
+
+  static async actualizarEstado(id, estado) {
+    const connection = await pool.getConnection();
+    await connection.query(
+      "UPDATE documentos SET estado = ? WHERE id_documento = ?",
+      [estado, id],
+    );
+    connection.release();
+  }
+}
 
 module.exports = Documento;
