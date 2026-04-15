@@ -229,3 +229,96 @@ tbody tr:nth-child(even) {
     background: #d88f2e;
     color: #2b2b28;
 }
+/* =========================
+   SIDEBAR (MENÚ LATERAL)
+========================= */
+
+/* BOTÓN MENU */
+.menu-toggle {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    background: #27403d;
+    color: #f1e4db;
+    border: none;
+    padding: 10px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.menu-toggle:hover {
+    background: #d88f2e;
+    color: #2b2b28;
+}
+
+/* SIDEBAR */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -260px;
+    width: 260px;
+    height: 100%;
+    background: #2b2b28; /* mismo tono oscuro */
+    color: #f1e4db;
+    padding: 20px;
+    transition: 0.3s ease;
+    box-shadow: 5px 0 15px rgba(0,0,0,0.2);
+}
+
+/* ACTIVO */
+.sidebar.active {
+    left: 0;
+}
+
+/* TÍTULO */
+.sidebar h2 {
+    margin-bottom: 20px;
+    color: #d88f2e;
+}
+
+/* LINKS */
+.sidebar a {
+    display: block;
+    text-decoration: none;
+    color: #f1e4db;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    background: #4a4a48;
+    transition: 0.2s;
+}
+
+.sidebar a:hover {
+    background: #d88f2e;
+    color: #2b2b28;
+}
+
+/* BOTÓN LOGOUT */
+.sidebar button {
+    margin-top: 20px;
+    width: 100%;
+    background: #27403d;
+    color: #f1e4db;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.sidebar button:hover {
+    background: #d88f2e;
+    color: #2b2b28;
+}
+
+/* CONTENIDO */
+.contenido {
+    padding: 20px;
+    margin-left: 20px;
+}
+
+/* CUANDO EL MENU ESTÁ ABIERTO */
+.sidebar.active ~ .contenido {
+    margin-left: 280px;
+    transition: 0.3s;
+}

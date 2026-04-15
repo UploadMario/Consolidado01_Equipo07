@@ -464,9 +464,9 @@ function eliminarUsuario(usuarioId) {
 const usuario = JSON.parse(localStorage.getItem("usuario"));
 
 // Bloquear acceso a cualquier página que no sea login si no hay sesión
-if (!usuario && !window.location.pathname.includes("login.html")) {
-  window.location.href = "../auth/login.html";
-}
+//if (!usuario && !window.location.pathname.includes("login.html")) {
+//  window.location.href = "/view/auth/login.html";
+//}
 
 // Ocultar gestión de usuarios si no es admin
 if (document.getElementById("btn-usuarios")) {

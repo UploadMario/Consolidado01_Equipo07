@@ -6,10 +6,30 @@
     <link rel="stylesheet" href="../css/styles.css" />
   </head>
   <body>
-    <h1>Gestión de Remitos</h1>
 
-    <div id="documentos-por-destino"></div>
+    <!-- SIDEBAR -->
+    <div id="sidebar-container"></div>
+
+    <!-- CONTENIDO -->
+    <main class="contenido">
+      <h1>Gestión de Remitos</h1>
+
+      <div id="documentos-por-destino"></div>
+    </main>
 
     <script src="../js/app.js"></script>
+
+    <script>
+      fetch("../components/sidebar.html")
+        .then(res => res.text())
+        .then(data => {
+          document.getElementById("sidebar-container").innerHTML = data;
+        });
+
+      function toggleMenu() {
+        document.getElementById("sidebar").classList.toggle("active");
+      }
+    </script>
+
   </body>
 </html>
